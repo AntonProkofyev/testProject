@@ -49,15 +49,18 @@ $(function () {
 			if (last >= 0) {
 				var health = this.units[last].health;
 				health -= damage;
+				this.units[last].health = health
+				
 				if (health <= 0) {
 					this.units.pop();
 					this.calculateGroupDps();
-					console.log('unit destroyed')
-					console.log(this.dps);
+					//console.log('unit destroyed')
+					//console.log(this.dps);
 					this.getDamage(Math.abs(health));
 				}
 			} else {
 				console.log('group destroyed')
+				return 'destroyed';
 			}
 		}
 		
@@ -66,6 +69,25 @@ $(function () {
 	
 	
 	var group1 = new Group();
-	group1.getDamage(5000)
+	var group2 = new Group();
 	
+	function battleFunc (group1, group2) {
+		var group1Dps = group1.dps;
+		var group2Dps = group2.dps;
+		var result1 = group1.getDamage(group2Dps);
+		var result2 = group2.getDamage(group1Dps);
+		console.log('------------------------')
+		console.log(group1Dps)
+		console.log(group2Dps)
+		console.log(result1)
+		console.log(result2)
+		if (result1 == 'destroyed' || result2 == 'destroyed') {
+			console.log(group1);
+			console.log(group2);
+			clearInterval(battle);
+		}
+	} 
+	
+	
+	var battle = setInterval(battleFunc, 200, group1, group2)
 })
